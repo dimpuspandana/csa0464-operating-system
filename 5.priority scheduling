@@ -1,0 +1,71 @@
+#include <stdio.h>
+
+#define MAX 10
+
+void priorityScheduling(int at[], int bt[], int pr[], int n) {
+    int rt[MAX], wt[MAX], tat[MAX], ct[MAX];
+    int completed = 0, time = 0;
+    float total_wt = 0, total_tat = 0;
+
+    for (int i = 0; i < n; i++)
+        rt[i] = bt[i];
+
+    printf("\nExecution Order: ");
+
+    while (completed < n) {
+        int p = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (at[i] <= time && rt[i] > 0) {
+                if (p == -1 || pr[i] < pr[p])
+                    p = i;
+            }
+        }
+
+        if (p == -1) {
+            time++;
+            continue;
+        }
+
+        printf("P%d ", p + 1);
+        rt[p]--;
+
+        if (rt[p] == 0) {
+            completed++;
+            ct[p] = time + 1;
+            tat[p] = ct[p] - at[p];
+            wt[p] = tat[p] - bt[p];
+
+            total_wt += wt[p];
+            total_tat += tat[p];
+        }
+
+        time++;
+    }
+
+    printf("\n\nP\tAT\tBT\tPR\tCT\tTAT\tWT\n");
+
+    for (int i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
+               i + 1, at[i], bt[i], pr[i], ct[i], tat[i], wt[i]);
+    }
+
+    printf("\nAverage Waiting Time = %.2f", total_wt / n);
+    printf("\nAverage Turnaround Time = %.2f\n", total_tat / n);
+}
+
+int main() {
+    int n, at[MAX], bt[MAX], pr[MAX];
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter AT, BT and Priority for P%d: ", i + 1);
+        scanf("%d%d%d", &at[i], &bt[i], &pr[i]);
+    }
+
+    priorityScheduling(at, bt, pr, n);
+
+    return 0;
+}
