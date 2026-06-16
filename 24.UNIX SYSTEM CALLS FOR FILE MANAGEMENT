@@ -1,0 +1,26 @@
+#include<stdio.h>
+#include<fcntl.h>
+#include<unistd.h>
+
+int main()
+{
+    int fd,n;
+    char writebuf[]="Operating System Lab";
+    char readbuf[50];
+
+    fd=open("sample.txt",O_CREAT|O_RDWR,0644);
+
+    write(fd,writebuf,sizeof(writebuf));
+
+    lseek(fd,0,SEEK_SET);
+
+    n=read(fd,readbuf,sizeof(readbuf));
+
+    readbuf[n]='\0';
+
+    printf("File Content: %s\n",readbuf);
+
+    close(fd);
+
+    return 0;
+}
