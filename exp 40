@@ -1,0 +1,17 @@
+#include <stdio.h>
+
+int main()
+{
+    int permission;
+
+    printf("Enter permission value (e.g., 755): ");
+    scanf("%d", &permission);
+
+    printf("\nOwner  : Read Write Execute\n");
+    printf("Group  : Read Execute\n");
+    printf("Others : Read Execute\n");
+
+    printf("\nPermission Entered = %d\n", permission);
+
+    return 0;
+}
