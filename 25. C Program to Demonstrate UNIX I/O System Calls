@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+int main() {
+    int fd = open("sample.txt", O_RDONLY);
+
+    if(fd < 0) {
+        printf("File not found\n");
+        return 0;
+    }
+
+    printf("File Descriptor = %d\n", fd);
+
+    int flags = fcntl(fd, F_GETFL);
+    printf("Flags = %d\n", flags);
+
+    off_t pos = lseek(fd, 0, SEEK_END);
+    printf("File Size = %ld bytes\n", pos);
+
+    struct stat st;
+    stat("sample.txt", &st);
+    printf("Inode Number = %ld\n", st.st_ino);
+
+    DIR *dir = opendir(".");
+    struct dirent *entry;
+
+    printf("\nDirectory Contents:\n");
+    while((entry = readdir(dir)) != NULL)
+        printf("%s\n", entry->d_name);
+
+    closedir(dir);
+    close(fd);
+
+    return 0;
+}
